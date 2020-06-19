@@ -251,6 +251,160 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/18/six/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jyy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/06/18/six/" itemprop="url">No.6蓝牙服务与特性</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-18T09:13:58+08:00">
+                2020-06-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/18/six/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/06/18/six/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="LED服务与特性"><a href="#LED服务与特性" class="headerlink" title="LED服务与特性"></a>LED服务与特性</h2><h4 id="LED服务及其特性的uuid号"><a href="#LED服务及其特性的uuid号" class="headerlink" title="LED服务及其特性的uuid号"></a>LED服务及其特性的uuid号</h4><p>点击此链接<a href="https://lancaster-university.github.io/microbit-docs/resources/bluetooth/bluetooth_profile.html" target="_blank" rel="noopener">https://lancaster-university.github.io/microbit-docs/resources/bluetooth/bluetooth_profile.html</a><br>如下图所示：<br><img src="/images/p9.png" alt=""></p>
+<h4 id="查看是否有LED服务"><a href="#查看是否有LED服务" class="headerlink" title="查看是否有LED服务"></a>查看是否有LED服务</h4><p><a href="chrome://bluetooth-internals">网址</a>点击右上方的Start Scan,找到自己的BBC板连接，连接成功后就可以看到多个服务，第一个就是led的服务与特性。<br><img src="/images/p10.png" alt=""></p>
+<h4 id="编写代码"><a href="#编写代码" class="headerlink" title="编写代码"></a>编写代码</h4><p>1、在script中添加标志性的变量，用来判断服务和特性是否补发现，每个服务和特性都要定义这个变量，它只有两种状态，true和flase</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var has_accelerometer_service &#x3D; false; </span><br><span class="line">var has_accelerometer_data &#x3D; false; </span><br><span class="line">var has_led_service &#x3D; false;</span><br><span class="line">var has_led_matrix_state &#x3D; false; </span><br><span class="line">var has_led_text&#x3D;false     &#x2F;&#x2F;新加的led_text特性相关语句</span><br><span class="line">var has_device_information_service &#x3D; false; </span><br><span class="line">var has_model_name_string &#x3D; false;</span><br></pre></td></tr></table></figure>
+<p>2、然后定义服务和特性uuid号和一些存放相应特性的变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; service UUIDs </span><br><span class="line"> ACCELEROMETER_SERVICE &#x3D; &#39;e95d0753-251d-470a-a062-fa1922dfa9a8&#39;; </span><br><span class="line"> LED_SERVICE &#x3D; &#39;e95dd91d-251d-470a-a062-fa1922dfa9a8&#39;; </span><br><span class="line"> DEVICE_INFORMATION_SERVICE &#x3D; &#39;0000180a-0000-1000-8000-00805f9b34fb&#39;;</span><br><span class="line">&#x2F;&#x2F; characteristic UUIDs </span><br><span class="line"> ACCELEROMETER_DATA &#x3D; &#39;e95dca4b-251d-470a-a062-fa1922dfa9a8&#39;; </span><br><span class="line"> LED_MATRIX_STATE  &#x3D; &#39;e95d7b77-251d-470a-a062-fa1922dfa9a8&#39;; </span><br><span class="line"> LED_TEXT&#x3D;&#39;e95d93ee-251d-470a-a062-fa1922dfa9a8&#39;  &#x2F;&#x2F;新加的led_text特性相关语句</span><br><span class="line"> MODEL_NUMBER_STRING &#x3D; &#39;00002a24-0000-1000-8000-00805f9b34fb&#39;;</span><br><span class="line"> &#x2F;&#x2F; cached characteristics var accelerometer_data; </span><br><span class="line"> var led_matrix_state; </span><br><span class="line"> var led_text;          &#x2F;&#x2F;新加的led_text特性相关语句</span><br><span class="line"> var model_number_string;</span><br><span class="line"> var accelerometer_data;</span><br></pre></td></tr></table></figure>
+<p>3、在discoverDevices()函数中，将扫描设备改成如下语句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var options &#x3D; &#123;acceptAllDevices:true,</span><br><span class="line">               optionalServices: [DEVICE_INFORMATION_SERVICE, ACCELEROMETER_SERVICE, LED_SERVICE]  &#x2F;&#x2F;在第5节课上添加</span><br><span class="line">           &#125;</span><br></pre></td></tr></table></figure>
+<p>4、最后是添加一个discoverSvcsAndChars() 函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line">function discoverSvcsAndChars()    &#x2F;&#x2F;在第5课基础上添加的函数</span><br><span class="line">       &#123;  </span><br><span class="line">           console.log(&quot;discoverSvcsAndChars server&#x3D;&quot; + connected_server); </span><br><span class="line">           connected_server.getPrimaryServices()</span><br><span class="line">           .then(services &#x3D;&gt; </span><br><span class="line">           &#123;    </span><br><span class="line">                   has_accelerometer_service &#x3D; false;    </span><br><span class="line">                   has_led_service &#x3D; false;    </span><br><span class="line">                   has_device_information_service &#x3D; false; </span><br><span class="line"></span><br><span class="line">                   services_discovered &#x3D; 0;    </span><br><span class="line">                   service_count &#x3D; services.length;    </span><br><span class="line">                   console.log(&quot;Got &quot; + service_count + &quot; services&quot;); </span><br><span class="line">       </span><br><span class="line">                   services.forEach(service &#x3D;&gt; </span><br><span class="line">                   &#123;     </span><br><span class="line">                       if (service.uuid &#x3D;&#x3D; ACCELEROMETER_SERVICE)</span><br><span class="line">                       &#123;      </span><br><span class="line">                           has_accelerometer_service &#x3D; true;    </span><br><span class="line">                       &#125;   </span><br><span class="line">                       if (service.uuid &#x3D;&#x3D; LED_SERVICE) </span><br><span class="line">                       &#123;      </span><br><span class="line">                           has_led_service &#x3D; true;     </span><br><span class="line">                       &#125;     </span><br><span class="line">                      if (service.uuid &#x3D;&#x3D; DEVICE_INFORMATION_SERVICE) </span><br><span class="line">                       &#123;      </span><br><span class="line">                           has_device_information_service &#x3D; true;     </span><br><span class="line">                       &#125; </span><br><span class="line">                       if (service.uuid &#x3D;&#x3D; TEMPERATURE_SERVICE) &#x2F;&#x2F;温度</span><br><span class="line">                       &#123;      </span><br><span class="line">                           has_temperature_service &#x3D; true;     </span><br><span class="line">                       &#125;        </span><br><span class="line">                       console.log(&#39;Getting Characteristics for service &#39; + service.uuid);     </span><br><span class="line">                       service.getCharacteristics()</span><br><span class="line">                       .then(characteristics &#x3D;&gt; </span><br><span class="line">                       &#123;      </span><br><span class="line">                           console.log(&#39;&gt; Service: &#39; + service.uuid);      </span><br><span class="line">                           services_discovered++;     </span><br><span class="line">                           characteristics_discovered &#x3D; 0;      </span><br><span class="line">                           characteristic_count &#x3D; characteristics.length;      </span><br><span class="line">                           characteristics.forEach(characteristic &#x3D;&gt; </span><br><span class="line">                           &#123;       </span><br><span class="line">                               characteristics_discovered++;       </span><br><span class="line">                               console.log(&#39;&gt;&gt; Characteristic: &#39; + characteristic.uuid);       </span><br><span class="line">                               if (characteristic.uuid &#x3D;&#x3D; ACCELEROMETER_DATA)</span><br><span class="line">                               &#123;        </span><br><span class="line">                                   accelerometer_data &#x3D; characteristic;        </span><br><span class="line">                                   has_accelerometer_data &#x3D; true;       </span><br><span class="line">                               &#125;      </span><br><span class="line">                               if (characteristic.uuid &#x3D;&#x3D; LED_MATRIX_STATE) </span><br><span class="line">                               &#123;        </span><br><span class="line">                                   led_matrix_state &#x3D; characteristic;        </span><br><span class="line">                                   has_led_matrix_state &#x3D; true;       </span><br><span class="line">                               &#125; </span><br><span class="line">                               if (characteristic.uuid &#x3D;&#x3D; LED_TEXT)    &#x2F;&#x2F;新加的led_text特性相关语句</span><br><span class="line">                               &#123;        </span><br><span class="line">                                   led_text &#x3D; characteristic;        </span><br><span class="line">                                   has_led_text &#x3D; true;       </span><br><span class="line">                               &#125;       </span><br><span class="line">                               if (characteristic.uuid &#x3D;&#x3D; MODEL_NUMBER_STRING) </span><br><span class="line">                               &#123;        </span><br><span class="line">                                   model_number_string &#x3D; characteristic;        </span><br><span class="line">                                   has_model_name_string &#x3D; true;       </span><br><span class="line">                               &#125;</span><br><span class="line">                               if (services_discovered &#x3D;&#x3D; service_count &amp;&amp; characteristics_discovered &#x3D;&#x3D; characteristic_count) </span><br><span class="line">                               &#123;        </span><br><span class="line">                                   console.log(&quot;FINISHED DISCOVERY&quot;); </span><br><span class="line">                                   setDiscoveryStatus(true);       </span><br><span class="line">                                   &#x2F;&#x2F;setDiscoveryStatus(true);                  </span><br><span class="line">                               &#125;    </span><br><span class="line">                           &#125;);     </span><br><span class="line">                       &#125;);    </span><br><span class="line">                   &#125;);  </span><br><span class="line">           &#125;);</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
+<p>5、其中的setDiscoveryStatus(true); 是用来表示服务是否成功的标志，代码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function setDiscoveryStatus(status)</span><br><span class="line">&#123;</span><br><span class="line">    services_discovered&#x3D;status;</span><br><span class="line">    document.getElementById(&#39;status_discovered&#39;).innerHTML&#x3D;status;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>6、在boby中第一个表格中再加一列用来判断服务是否成功</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;table border&#x3D;&quot;1&quot;&gt;</span><br><span class="line">               &lt;tr&gt;</span><br><span class="line">                   &lt;td&gt;     &lt;b&gt;Connected&lt;&#x2F;b&gt;   &lt;&#x2F;td&gt;</span><br><span class="line">                   &lt;td&gt;     &lt;b&gt;Service Discovery Completed&lt;&#x2F;b&gt;   &lt;&#x2F;td&gt;</span><br><span class="line">               &lt;&#x2F;tr&gt;</span><br><span class="line">               &lt;tr&gt;</span><br><span class="line">                   &lt;td id&#x3D;&quot;status_connected&quot;&gt; false &lt;&#x2F;td&gt;</span><br><span class="line">                   &lt;td id&#x3D;&quot;status_discovered&quot;&gt; false &lt;&#x2F;td&gt;</span><br><span class="line">               &lt;&#x2F;tr&gt;</span><br><span class="line">           &lt;&#x2F;table&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><p>在chrome中打开.html文件，就会发现LED的服务和它的相关特性。</p>
+<h2 id="温度服务与特性"><a href="#温度服务与特性" class="headerlink" title="温度服务与特性"></a>温度服务与特性</h2><h4 id="查看温度服务及其uuid号"><a href="#查看温度服务及其uuid号" class="headerlink" title="查看温度服务及其uuid号"></a>查看温度服务及其uuid号</h4><p>点击此链接<a href="https://lancaster-university.github.io/microbit-docs/resources/bluetooth/bluetooth_profile.html" target="_blank" rel="noopener">https://lancaster-university.github.io/microbit-docs/resources/bluetooth/bluetooth_profile.html</a><br>如下图所示：<br><img src="/images/p6.png" alt=""></p>
+<h4 id="修改micro-bit板子端程序"><a href="#修改micro-bit板子端程序" class="headerlink" title="修改micro bit板子端程序"></a>修改micro bit板子端程序</h4><p><a href="https://makecode.microbit.org" target="_blank" rel="noopener">点击编辑</a><br><img src="/images/p7.png" alt=""><br>切换为JavaScript格式，在最后加上bluetooth.startTemperatureService()<br><img src="/images/p8.png" alt=""></p>
+<p>在script中加入以下语句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; presence of services and characteristics </span><br><span class="line">var has_temperature_service &#x3D;false;    &#x2F;&#x2F;温度</span><br><span class="line">var has_tem_temperature &#x3D; false;  </span><br><span class="line">&#x2F;&#x2F; service UUIDs</span><br><span class="line">TEMPERATURE_SERVICE &#x3D;&#39;e95d6100-251d-470a-a062-fa1922dfa9a8&#39;;</span><br><span class="line">&#x2F;&#x2F; characteristic UUIDs</span><br><span class="line">TEM_TEMPERATURE &#x3D;&#39;e95d9250-251d-470a-a062-fa1922dfa9a8&#39;; </span><br><span class="line">&#x2F;&#x2F; cached characteristics var accelerometer_data;  </span><br><span class="line">var tem_temperature;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">function discoverSvcsAndChars()    &#x2F;&#x2F;在第5课基础上添加的函数</span><br><span class="line">       &#123;  </span><br><span class="line">           console.log(&quot;discoverSvcsAndChars server&#x3D;&quot; + connected_server); </span><br><span class="line">           connected_server.getPrimaryServices()</span><br><span class="line">           .then(services &#x3D;&gt; </span><br><span class="line">           &#123;    </span><br><span class="line">                   has_accelerometer_service &#x3D; false;    </span><br><span class="line">                   has_led_service &#x3D; false;    </span><br><span class="line">                   has_device_information_service &#x3D; false; </span><br><span class="line">                   has_temperature_service&#x3D;false;  &#x2F;&#x2F;温度</span><br><span class="line"></span><br><span class="line">                   services_discovered &#x3D; 0;    </span><br><span class="line">                   service_count &#x3D; services.length;    </span><br><span class="line">                   console.log(&quot;Got &quot; + service_count + &quot; services&quot;); </span><br><span class="line">       </span><br><span class="line">                   services.forEach(service &#x3D;&gt; </span><br><span class="line">                   &#123;     </span><br><span class="line">                       if (service.uuid &#x3D;&#x3D; ACCELEROMETER_SERVICE)</span><br><span class="line">                       &#123;      </span><br><span class="line">                           has_accelerometer_service &#x3D; true;    </span><br><span class="line">                       &#125;   </span><br><span class="line">                       if (service.uuid &#x3D;&#x3D; LED_SERVICE) </span><br><span class="line">                       &#123;      </span><br><span class="line">                           has_led_service &#x3D; true;     </span><br><span class="line">                       &#125;     </span><br><span class="line">                      if (service.uuid &#x3D;&#x3D; DEVICE_INFORMATION_SERVICE) </span><br><span class="line">                       &#123;      </span><br><span class="line">                           has_device_information_service &#x3D; true;     </span><br><span class="line">                       &#125; </span><br><span class="line">                       if (service.uuid &#x3D;&#x3D; TEMPERATURE_SERVICE) &#x2F;&#x2F;温度</span><br><span class="line">                       &#123;      </span><br><span class="line">                           has_temperature_service &#x3D; true;     </span><br><span class="line">                       &#125;        </span><br><span class="line">                       console.log(&#39;Getting Characteristics for service &#39; + service.uuid);     </span><br><span class="line">                       service.getCharacteristics()</span><br><span class="line">                       .then(characteristics &#x3D;&gt; </span><br><span class="line">                       &#123;      </span><br><span class="line">                           console.log(&#39;&gt; Service: &#39; + service.uuid);      </span><br><span class="line">                           services_discovered++;     </span><br><span class="line">                           characteristics_discovered &#x3D; 0;      </span><br><span class="line">                           characteristic_count &#x3D; characteristics.length;      </span><br><span class="line">                           characteristics.forEach(characteristic &#x3D;&gt; </span><br><span class="line">                           &#123;       </span><br><span class="line">                               characteristics_discovered++;       </span><br><span class="line">                               console.log(&#39;&gt;&gt; Characteristic: &#39; + characteristic.uuid);       </span><br><span class="line">                               if (characteristic.uuid &#x3D;&#x3D; ACCELEROMETER_DATA)</span><br><span class="line">                               &#123;        </span><br><span class="line">                                   accelerometer_data &#x3D; characteristic;        </span><br><span class="line">                                   has_accelerometer_data &#x3D; true;       </span><br><span class="line">                               &#125;      </span><br><span class="line">                               if (characteristic.uuid &#x3D;&#x3D; LED_MATRIX_STATE) </span><br><span class="line">                               &#123;        </span><br><span class="line">                                   led_matrix_state &#x3D; characteristic;        </span><br><span class="line">                                   has_led_matrix_state &#x3D; true;       </span><br><span class="line">                               &#125;       </span><br><span class="line">                               if (characteristic.uuid &#x3D;&#x3D; MODEL_NUMBER_STRING) </span><br><span class="line">                               &#123;        </span><br><span class="line">                                   model_number_string &#x3D; characteristic;        </span><br><span class="line">                                   has_model_name_string &#x3D; true;       </span><br><span class="line">                               &#125;</span><br><span class="line">                               if(characteristic.uuid &#x3D;&#x3D; TEM_TEMPERATURE)  &#x2F;&#x2F;温度</span><br><span class="line">                               &#123;</span><br><span class="line">                                   tem_temperature &#x3D; characteristic; </span><br><span class="line">                                   has_tem_temperature &#x3D; true;</span><br><span class="line">                               &#125;     </span><br><span class="line">                               if (services_discovered &#x3D;&#x3D; service_count &amp;&amp; characteristics_discovered &#x3D;&#x3D; characteristic_count) </span><br><span class="line">                               &#123;        </span><br><span class="line">                                   console.log(&quot;FINISHED DISCOVERY&quot;); </span><br><span class="line">                                   setDiscoveryStatus(true);       </span><br><span class="line">                                   &#x2F;&#x2F;setDiscoveryStatus(true);                  </span><br><span class="line">                               &#125;    </span><br><span class="line">                           &#125;);     </span><br><span class="line">                       &#125;);    </span><br><span class="line">                   &#125;);  </span><br><span class="line">           &#125;);</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后不要忘了改discoverDevices()函数把原来的(发现所有周边蓝牙设备)这句代码加上温度服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var options &#x3D; &#123;acceptAllDevices:true,</span><br><span class="line">                optionalServices: [DEVICE_INFORMATION_SERVICE, ACCELEROMETER_SERVICE, LED_SERVICE,TEMPERATURE_SERVICE]  </span><br><span class="line">            &#125;        &#x2F;&#x2F;发现所有周边蓝牙设备</span><br></pre></td></tr></table></figure>
+<h4 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h4><p>在chrome中打开.html文件，按f12便会看到多出一个服务和特性，便成功了。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/16/five/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1108,7 +1262,7 @@
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1121,7 +1275,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>
