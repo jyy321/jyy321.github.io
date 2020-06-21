@@ -251,6 +251,149 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/21/seven/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jyy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/06/21/seven/" itemprop="url">No.7读写特性</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-21T09:13:58+08:00">
+                2020-06-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/21/seven/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/06/21/seven/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="修改代码："><a href="#修改代码：" class="headerlink" title="修改代码："></a>修改代码：</h2><p>1、添加一个读数据的函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">function readModelNumber() </span><br><span class="line">&#123;  </span><br><span class="line">    console.log(&quot;readModelNumber&quot;);   </span><br><span class="line">    &#x2F;&#x2F; state validation   </span><br><span class="line">    if (!connected) </span><br><span class="line">    &#123;     </span><br><span class="line">        alert(&quot;Error: Discover and connect to a device before using this function&quot;);     </span><br><span class="line">        return;   </span><br><span class="line">    &#125;   </span><br><span class="line">    if (!services_discovered) </span><br><span class="line">    &#123;     </span><br><span class="line">        alert(&quot;Error: Service discovery has not yet completed&quot;);     </span><br><span class="line">        return;   </span><br><span class="line">    &#125;    </span><br><span class="line">    if (!has_device_information_service) </span><br><span class="line">    &#123;     </span><br><span class="line">        alert(&quot;Error: The connected device does not contain the device information service&quot;);     </span><br><span class="line">        return;   </span><br><span class="line">    &#125;   </span><br><span class="line">    if (!has_model_name_string) </span><br><span class="line">    &#123;     </span><br><span class="line">        alert(&quot;Error: The connected device does not contain the model name string characteristic&quot;);     </span><br><span class="line">        return;   </span><br><span class="line">    &#125;   </span><br><span class="line">    </span><br><span class="line">    model_number_string.readValue()  </span><br><span class="line">    .then(value &#x3D;&gt; &#123;   </span><br><span class="line">        data &#x3D; new Uint8Array(value.buffer);   </span><br><span class="line">        model_number_string &#x3D; new TextDecoder(&quot;utf-8&quot;).decode(data);  </span><br><span class="line">        console.log(model_number_string);   </span><br><span class="line">        document.getElementById(&quot;model_number&quot;).innerHTML &#x3D; model_number_string;  </span><br><span class="line">        &#125;)  </span><br><span class="line">    .catch(error &#x3D;&gt; &#123;  </span><br><span class="line">        console.log(&#39;Error: &#39; + error);   </span><br><span class="line">        alert(&#39;Error: &#39; + error);   </span><br><span class="line">        return;  </span><br><span class="line">        &#125;); </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>2、添加一个按钮：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;h3&gt;Read Characteristic - Model number&lt;&#x2F;h3&gt;  </span><br><span class="line">        &lt;button id&#x3D;&quot;btn_read&quot; onclick&#x3D;&quot;readModelNumber()&quot;&gt;Read Model number&lt;&#x2F;button&gt;</span><br></pre></td></tr></table></figure>
+
+<p>3、效果如下图所示：</p>
+<p><img src="/images/p11.png" alt=""></p>
+<h2 id="板载LED的亮灭"><a href="#板载LED的亮灭" class="headerlink" title="板载LED的亮灭"></a>板载LED的亮灭</h2><p>用LED就要用到LED的服务及其特性，在这边用到了LED服务的LED_MATRIX_STATE特性，可以添加一个randomLEDs()函数，控制小灯的亮灭</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">function randomLEDs()   &#x2F;&#x2F;第6课上添加</span><br><span class="line">       &#123;  </span><br><span class="line">           console.log(&quot;randomLEDs&quot;);   </span><br><span class="line">           &#x2F;&#x2F; state validation   </span><br><span class="line">           if (!connected) </span><br><span class="line">           &#123;     </span><br><span class="line">               alert(&quot;Error: Discover and connect to a device before using this function&quot;);     </span><br><span class="line">               return;   </span><br><span class="line">           &#125;   </span><br><span class="line">           if (!services_discovered) </span><br><span class="line">           &#123;     </span><br><span class="line">               alert(&quot;Error: Service discovery has not yet completed&quot;);     </span><br><span class="line">               return;  </span><br><span class="line">           &#125;   </span><br><span class="line">           if (!has_led_service) </span><br><span class="line">           &#123;     </span><br><span class="line">               alert(&quot;Error: The connected device does not contain the LED service&quot;);     </span><br><span class="line">               return;  </span><br><span class="line">           &#125;   </span><br><span class="line">           if (!has_led_matrix_state) </span><br><span class="line">           &#123;      </span><br><span class="line">               alert(&quot;Error: The connected device does not contain the LED matrix state characteristic&quot;);      </span><br><span class="line">               return;   </span><br><span class="line">           &#125;   </span><br><span class="line">           var led_array &#x3D; [0, 0, 0, 0, 0];   </span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F; Math.random():0~1  Math.floor(x):返回小于等于x的最大整数</span><br><span class="line">           led_array[0] &#x3D; Math.floor(Math.random() * 32);  </span><br><span class="line">           led_array[1] &#x3D; 1;   </span><br><span class="line">           led_array[2] &#x3D; 2;   </span><br><span class="line">           led_array[3] &#x3D; 3;   </span><br><span class="line">           led_array[4] &#x3D; 4;</span><br><span class="line">           var led_matrix_data &#x3D; new Uint8Array(led_array); </span><br><span class="line"></span><br><span class="line">           led_matrix_state.writeValue(led_matrix_data.buffer)</span><br><span class="line">           .then(_ &#x3D;&gt; &#123;   </span><br><span class="line">               console.log(&#39;LED matrix state changed&#39;);  </span><br><span class="line">               &#125;)  </span><br><span class="line">           .catch(error &#x3D;&gt; &#123;   </span><br><span class="line">               console.log(&#39;Error: &#39; + error);   </span><br><span class="line">               alert(&#39;Error: &#39; + error);   return;  </span><br><span class="line">               &#125;); </span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这边我们同样可以添加一个按钮，在上方数组中 led_array[0]是随机产生0到31之间的数，这样就可以每按一次，第一排小灯就会变化一次</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;button id&#x3D;&quot;btn_write&quot; onclick&#x3D;&quot;randomLEDs()&quot;&gt;Randomise LEDs&lt;&#x2F;button&gt;</span><br><span class="line">       &lt;h3&gt;Read Characteristic - Model number&lt;&#x2F;h3&gt;</span><br></pre></td></tr></table></figure>
+
+<p>连接板子即可查看效果。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/18/six/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1262,7 +1405,7 @@
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1275,7 +1418,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>
